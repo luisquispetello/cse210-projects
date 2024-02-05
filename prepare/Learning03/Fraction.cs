@@ -1,9 +1,9 @@
-public class Fraction 
+public class Fraction
 {
   private int _top;
   private int _bottom;
-  
-  
+
+
 
   public Fraction()
   {
@@ -54,6 +54,6 @@ public class Fraction
 
   public double GetDecimalValue()
   {
-    return  (double)_top / (double)_bottom;
+    return (double)_top / (double)_bottom;
   }
 }
