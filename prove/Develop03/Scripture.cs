@@ -1,4 +1,4 @@
-
+using System.Collections.Generic;
 public class Scripture
 {
   private Reference _reference;
@@ -10,9 +10,10 @@ public class Scripture
     _reference = reference;
     _words = text.Split(' ').Select(word => new Word(word)).ToList();
 
-    // 👇 This code below can be used instead of the one line code avobe.
+    // 👇 Code below can be used instead of the code above
+    // _words = new();
     // string[] wordsArray = text.Split(' ');
-    // foreach(string word in wordsArray)
+    // foreach (string word in wordsArray)
     // {
     //   _words.Add(new Word(word));
     // }
@@ -21,29 +22,32 @@ public class Scripture
 
   public void HideRandomWords(int numberToHide)
   {
+    List<Word> visibleWords = _words.Where(word => !word.IsHidden()).ToList();
     Random random = new();
+    int index = random.Next(visibleWords.Count);
 
-    for (int i = 0; i < numberToHide; i++)
+    if (visibleWords.Count > 0)
     {
-      int index = random.Next(_words.Count);
-      _words[index].Hide();
+      for (int i = 0; i < numberToHide; i++)
+      {
+        visibleWords[index].Hide();
+      }
     }
+
   }
 
   public string GetDisplayText()
   {
-    return string.Join(' ', _words);
+    List<string> displayWords = new();
+    foreach (Word word in _words)
+    {
+      displayWords.Add(word.GetDisplayText());
+    }
+    return $"{_reference.GetDisplayText()} {string.Join(" ", displayWords)}";
   }
 
-  public bool isCompletelyHidden()
+  public bool IsCompletelyHidden()
   {
-    return _words.All(word => word.isHidden());
-
-    // 👇 This code below can be used instead of the one line code avobe.
-    // foreach (Word word in _words)
-    // {
-    //   if(!word.isHidden()) { return false; }
-    // }
-    // return true;
+    return _words.All(word => word.IsHidden());
   }
 }
