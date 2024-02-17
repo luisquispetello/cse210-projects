@@ -3,16 +3,17 @@ public class ListingActivity : Activity
   private int _count;
   private List<string> _prompts;
 
-  public ListingActivity(string name, string description, int duration)
+  public ListingActivity(string name, string description, int duration, List<string> prompts)
     : base(name, description, duration)
   {
-
+    _prompts = prompts;
   }
 
   public void Run()
   {
     DisplayStartingMessage();
     Thread.Sleep(3000);
+    ShowSpinner(3); // Pause for 3 seconds with a spinner animation
   }
 
   public void GetRandomPrompt()
