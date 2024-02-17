@@ -14,6 +14,7 @@ public class ListingActivity : Activity
     DisplayStartingMessage();
     Thread.Sleep(3000);
     ShowSpinner(3); // Pause for 3 seconds with a spinner animation
+    DisplayEndingMessage();
   }
 
   public void GetRandomPrompt()

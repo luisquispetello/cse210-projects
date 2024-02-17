@@ -3,7 +3,7 @@ public class BreathingActivity : Activity
   public BreathingActivity(string name, string description, int duration)
     : base(name, description, duration)
   {
-    
+    _duration = duration;
   }
 
   public void Run()
@@ -12,16 +12,16 @@ public class BreathingActivity : Activity
 
     Console.WriteLine("Get ready to start breathing...");
 
-    int secondsElapsed = 0;
-    while (secondsElapsed < duration)
+    int remainingTime = _duration;
+    while (remainingTime > 0)
     {
       Console.WriteLine("Breathe in...");
-      ShowCountDown(3); // Countdown for 3 seconds
+      ShowCountDown(3); 
 
       Console.WriteLine("Breathe out...");
-      ShowCountDown(3); // Countdown for 3 seconds
+      ShowCountDown(3); 
 
-      secondsElapsed += 6; // Each breathing cycle takes 6 seconds (3 seconds for inhale + 3 seconds for exhale)
+      remainingTime -= 6; 
     }
 
     DisplayEndingMessage();

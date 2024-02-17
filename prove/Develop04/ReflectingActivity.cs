@@ -17,7 +17,6 @@ public class ReflectingActivity : Activity
     DisplayPrompt();
     DisplayQuestions();
     DisplayEndingMessage();
-    Thread.Sleep(3000);
   }
 
   public string GetRandomPrompt()

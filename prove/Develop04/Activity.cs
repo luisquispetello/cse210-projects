@@ -3,7 +3,7 @@ public class Activity
 {
   private string _name;
   private string _description;
-  private int _duration;
+  protected int _duration;
 
   public Activity(string name, string description, int duration)
   {
@@ -23,26 +23,34 @@ public class Activity
   public void DisplayEndingMessage()
   {
     Console.WriteLine($"GREAT! You have completed the {_name} activity.");
+    Console.WriteLine($"Total duration: {_duration} seconds");
+
   }
 
   public void ShowSpinner(int seconds)
   {
-    Console.Write("Loading ");
-
-    for (int i = 0; i < seconds; i--)
+    for (int i = 0; i < seconds; i++)
     {
-      Console.Write(".");
-      Thread.Sleep(1000); 
+      Console.Write("/");
+      Thread.Sleep(100); // Pause for 0.1 second
+      Console.Write("\b");
+      Console.Write("-");
+      Thread.Sleep(100); // Pause for 0.1 second
+      Console.Write("\b");
+      Console.Write("\\");
+      Thread.Sleep(100); // Pause for 0.1 second
+      Console.Write("\b");
+      Console.Write("|");
+      Thread.Sleep(100); // Pause for 0.1 second
+      Console.Write("\b");
     }
-
-    Console.WriteLine();
   }
 
   public void ShowCountDown(int seconds)
   {
     for(int i = 0; i< seconds; i--)
     {
-      Console.WriteLine($"Countdown: {i}");
+      Console.WriteLine($"Time remaining: {i} seconds");
       Thread.Sleep(1000);
     }
     
