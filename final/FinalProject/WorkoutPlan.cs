@@ -1,16 +1,31 @@
 public class WorkoutPlan
 {
+  private List<Exercise> _exercises;
+  private int _duration;
 
-  public DateTime _date;
-  public List<Exercise> _exercises = new();
-
-  public void AddExercise(Exercise exercise)
+  public WorkoutPlan(List<Exercise> exercises)
   {
-    _exercises.Add(exercise);
+    _exercises = exercises;
+    _duration = GetTotalDuration();
   }
 
-  public void RemoveExercise(Exercise exercise)
+  public int GetTotalDuration()
   {
-    _exercises.Remove(exercise);
+    int totalDuration = 0;
+    foreach (Exercise exercise in _exercises)
+    {
+      totalDuration += exercise is CardioExercise ? ((CardioExercise)exercise).DurationInMinutes : 0;
+    }
+    return totalDuration;
+  }
+
+  public double GetTotalCalories()
+  {
+    double totalCalories = 0;
+    foreach (Exercise exercise in _exercises)
+    {
+      totalCalories += exercise.CalculateCaloriesBurned();
+    }
+    return totalCalories;
   }
 }

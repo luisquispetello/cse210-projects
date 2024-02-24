@@ -1,16 +1,30 @@
 public class StrengthExercise : Exercise
 {
-  private double _weightLiftedInKg;
+  private int _repetitions;
+  private int _sets;
+  private int _weightLiftedInKg;
 
-  // Constructor
-  public StrengthExercise(string name, int difficultyLevel, double weightLifted)
-    : base(name, difficultyLevel)
+  public StrengthExercise(string name, int repetitions, int sets, int weightLiftedInKg) : base(name)
   {
-    _weightLiftedInKg = weightLifted;
+    _repetitions = repetitions;
+    _sets = sets;
+    _weightLiftedInKg = weightLiftedInKg;
   }
 
   public override double CalculateCaloriesBurned()
   {
-    return 0;
+
+
+    return _repetitions * _sets * _weightLiftedInKg * 0.001; 
+  }
+
+  public override void DisplayExerciseDetails()
+  {
+    Console.WriteLine("Exercise Details:");
+    Console.WriteLine("Name: " + _name);
+    Console.WriteLine("Type: Strength");
+    Console.WriteLine("Repetitions: " + _repetitions);
+    Console.WriteLine("Sets: " + _sets);
+    Console.WriteLine("Weight Lifted: " + _weightLiftedInKg + " kg");
   }
 }

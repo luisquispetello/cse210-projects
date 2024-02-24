@@ -1,11 +1,19 @@
 public class WorkoutLog
 {
-  public DateTime _date;
-  public List<Exercise> _completedExercises = new();
+  private List<WorkoutPlan> _completedWorkouts;
 
-  public void LogWorkout(List<Exercise> exercises)
+  public WorkoutLog()
   {
-    _date = DateTime.Now;
-    _completedExercises.AddRange(exercises);
+    _completedWorkouts = new List<WorkoutPlan>();
+  }
+
+  public void AddCompletedWorkout(WorkoutPlan workout)
+  {
+    _completedWorkouts.Add(workout);
+  }
+
+  public List<WorkoutPlan> GetCompletedWorkouts()
+  {
+    return _completedWorkouts;
   }
 }

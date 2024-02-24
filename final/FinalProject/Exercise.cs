@@ -1,13 +1,12 @@
 public abstract class Exercise
 {
-	private string _name;
-	private int _difficultyLevel;
+	protected string _name;
 
-	public Exercise(string name, int difficultyLevel)
+	public Exercise(string name)
 	{
 		_name = name;
-		_difficultyLevel = difficultyLevel;
 	}
 
 	public abstract double CalculateCaloriesBurned();
+	public abstract void DisplayExerciseDetails();
 }
