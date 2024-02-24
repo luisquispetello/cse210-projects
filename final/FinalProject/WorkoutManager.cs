@@ -47,7 +47,41 @@ public class WorkoutManager
 
   private void LoadUserData()
   {
-    Console.WriteLine("Loading existing user data...");
+    Console.Write("What is the filename for the file goal: ");
+    string filename = Console.ReadLine();
+
+    string[] lines = System.IO.File.ReadAllLines(filename);
+
+    foreach (string line in lines)
+    {
+      string[] parts = line.Split("|");
+
+      string name = parts[0];
+      string description = parts[1];
+      int points = int.Parse(parts[2]);
+      // For ChecklistGoal
+      int target = parts.Length > 4 ? int.Parse(parts[4]) : 0;
+      int bonus = parts.Length > 5 ? int.Parse(parts[5]) : 0;
+
+      Goal goal;
+      if (parts.Length == 3)
+      {
+        goal = new SimpleGoal(name, description, points);
+      }
+      else if (parts.Length == 6)
+      {
+        goal = new ChecklistGoal(name, description, points, target, bonus);
+      }
+      else
+      {
+        goal = new EternalGoal(name, description, points);
+      }
+
+      _goals.Add(goal);
+    }
+
+    Console.Clear();
+    Console.WriteLine("Goals loaded successfully.");
   }
 
   private void DisplayMenu()
@@ -91,7 +125,7 @@ public class WorkoutManager
   private void SaveWorkout()
   {
     Console.Write("What is the filename for the goal file? ");
-    string fileName = Console.ReadLine(); 
+    string fileName = Console.ReadLine();
 
     using (StreamWriter outputFile = new(fileName))
     {
@@ -101,7 +135,8 @@ public class WorkoutManager
       }
     }
     Console.Clear();
-    Console.WriteLine("Goals saved successfully.");  }
+    Console.WriteLine("Goals saved successfully.");
+  }
 
   private void Exit()
   {
