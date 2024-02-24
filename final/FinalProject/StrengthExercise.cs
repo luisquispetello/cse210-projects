@@ -15,7 +15,7 @@ public class StrengthExercise : Exercise
   {
 
 
-    return _repetitions * _sets * _weightLiftedInKg * 0.001; 
+    return _repetitions * _sets * _weightLiftedInKg * 0.001;
   }
 
   public override void DisplayExerciseDetails()

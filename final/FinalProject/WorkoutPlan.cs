@@ -1,9 +1,10 @@
 public class WorkoutPlan
 {
+  private string name;
   private List<Exercise> _exercises;
   private int _duration;
 
-  public WorkoutPlan(List<Exercise> exercises)
+  public WorkoutPlan(string name, List<Exercise> exercises, int _duration)
   {
     _exercises = exercises;
     _duration = GetTotalDuration();

@@ -3,31 +3,24 @@ using System.Collections.Generic;
 
 public class WorkoutManager
 {
-  private Dictionary<int, Action> _menuOptions;
   private User _user;
+  private List<WorkoutPlan> _workoutsPlan;
 
   public WorkoutManager()
   {
-    _menuOptions = new Dictionary<int, Action>
-    {
-      { 1, CreateWorkoutPlan },
-      { 2, RecordWorkout },
-      { 3, CalculateStatistics },
-      { 4, SaveWorkout },
-      { 5, Exit }
-    };
   }
 
   public void Start()
   {
-    Console.WriteLine("Are you a new user? (yes/no)");
-    string newUserChoice = Console.ReadLine().ToLower();
 
-    if (newUserChoice == "yes")
+    Console.WriteLine("Are you a new user? (yes/no)");
+    string choice = Console.ReadLine().ToLower();
+
+    if (choice == "yes")
     {
       CreateUserAccount();
     }
-    else if (newUserChoice == "no")
+    else if (choice == "no")
     {
       LoadUserData();
     }
@@ -40,10 +33,62 @@ public class WorkoutManager
     DisplayMenu();
   }
 
+
+  private void DisplayMenu()
+  {
+    Dictionary<string, Action> menuOptions = new()
+    {
+      { "1", CreateWorkoutPlan },
+      { "2", RecordWorkout },
+      { "3", CalculateStatistics },
+      { "4", SaveWorkout },
+      { "5", Exit }
+    };
+
+    Console.WriteLine("Menu Options:");
+    Console.WriteLine("1. Create Workout Plan");
+    Console.WriteLine("2. Record Workout");
+    Console.WriteLine("3. Calculate Statistics");
+    Console.WriteLine("4. Save Workout");
+    Console.WriteLine("5. Exit");
+
+    Console.Write("Select an option: ");
+    string choice = Console.ReadLine();
+
+    if (menuOptions.ContainsKey(choice))
+    {
+      menuOptions[choice].Invoke();
+    }
+    else
+    {
+      Console.WriteLine("Invalid choice. Please choose a number between 1 and 5.");
+      DisplayMenu();
+    }
+  }
+
+
   private void CreateUserAccount()
   {
     Console.WriteLine("Creating a new user account...");
+
+    Console.Write("Enter your name: ");
+    string name = Console.ReadLine();
+
+    Console.Write("Enter your age: ");
+    int age = int.Parse(Console.ReadLine());
+
+    Console.Write("Enter your gender: ");
+    string gender = Console.ReadLine();
+
+    Console.Write("Enter your weight in Kg: ");
+    int weight = int.Parse(Console.ReadLine());
+
+    // Creamos una nueva instancia de User con los datos proporcionados
+    _user = new User(name, age, gender, weight);
+
+    Console.WriteLine("User account created successfully!");
   }
+
 
   private void LoadUserData()
   {
@@ -84,32 +129,72 @@ public class WorkoutManager
     Console.WriteLine("Goals loaded successfully.");
   }
 
-  private void DisplayMenu()
-  {
-    Console.WriteLine("Menu:");
-    Console.WriteLine("1. Create Workout Plan");
-    Console.WriteLine("2. Record Workout");
-    Console.WriteLine("3. Calculate Statistics");
-    Console.WriteLine("4. Save Workout");
-    Console.WriteLine("5. Exit");
-
-    Console.Write("Select an option: ");
-    int choice = int.Parse(Console.ReadLine());
-
-    if (_menuOptions.ContainsKey(choice))
-    {
-      _menuOptions[choice].Invoke();
-    }
-    else
-    {
-      Console.WriteLine("Invalid choice. Please select a valid option.");
-      DisplayMenu();
-    }
-  }
-
   private void CreateWorkoutPlan()
   {
-    Console.WriteLine("Creating a workout plan...");
+    List<Exercise> exercises = new();
+    bool addingExercises = true;
+
+    Dictionary<string, Action> exerciseOptions = new()
+    {
+      { "1", () =>
+        {
+          Console.Write("Name of cardio exercise: ");
+          string cardioName = Console.ReadLine();
+          Console.Write("Duration (minutes): ");
+          int cardioDuration = int.Parse(Console.ReadLine());
+
+          CardioExercise cardioExercise = new(cardioName, cardioDuration);
+          exercises.Add(cardioExercise);
+        }
+      },
+      { "2", () =>
+        {
+          Console.Write("Name of strength exercise: ");
+          string strengthName = Console.ReadLine();
+          Console.Write("Repetitions: ");
+          int repetitions = int.Parse(Console.ReadLine());
+          Console.Write("Sets: ");
+          int sets = int.Parse(Console.ReadLine());
+          Console.Write("Weight lifted (kg): ");
+          int weightLifted = int.Parse(Console.ReadLine());
+
+          StrengthExercise strengthExercise = new(strengthName, repetitions, sets, weightLifted);
+          exercises.Add(strengthExercise);
+        }
+      },
+      { "3", () => addingExercises = false }
+    };
+
+    Console.WriteLine("Enter workout plan details:");
+    Console.Write("Name of your workout plan: ");
+    string name = Console.ReadLine();
+    Console.Write("How many days a week are you going to train?: ");
+    int duration = int.Parse(Console.ReadLine());
+    Console.WriteLine("Now you will add exercises for your workuot. Select 3 when you have finished adding exercises.");
+
+    while (addingExercises)
+    {
+      Console.WriteLine("Select exercise type:");
+      Console.WriteLine("1. Cardio");
+      Console.WriteLine("2. Strength");
+      Console.WriteLine("3. Done adding exercises");
+
+      string exerciseType = Console.ReadLine();
+
+      if (exerciseOptions.ContainsKey(exerciseType))
+      {
+        exerciseOptions[exerciseType].Invoke();
+      }
+      else
+      {
+        Console.WriteLine("Invalid choice. Please choose a number between 1 and 3.");
+      }
+    }
+
+    WorkoutPlan workoutPlan = new(name, exercises, duration);
+    _workoutsPlan.Add(workoutPlan);
+    Console.WriteLine("Workout plan created!");
+
   }
 
   private void RecordWorkout()
