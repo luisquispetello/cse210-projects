@@ -8,6 +8,12 @@ public class WorkoutManager
   private WorkoutLog _workoutLog;
 
 
+  public WorkoutManager()
+  {
+    _workoutPlans = new List<WorkoutPlan>();
+  }
+
+
   public void Start()
   {
 
@@ -179,7 +185,7 @@ public class WorkoutManager
     WorkoutPlan workoutPlan = new(name, exercises, duration);
     _workoutPlans.Add(workoutPlan);
     Console.WriteLine("Workout plan created!");
-
+    DisplayMenu();
   }
 
 
@@ -199,6 +205,8 @@ public class WorkoutManager
       WorkoutPlan selectedWorkoutPlan = _workoutPlans[choice - 1];
       _workoutLog.AddCompletedWorkout(selectedWorkoutPlan);
       Console.WriteLine("Workout recorded successfully.");
+      DisplayMenu();
+
     }
     else
     {
@@ -229,6 +237,7 @@ public class WorkoutManager
     }
 
     Console.WriteLine("Workout data saved successfully.");
+    DisplayMenu();
   }
 
 
