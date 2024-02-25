@@ -20,7 +20,6 @@ public class StrengthExercise : Exercise
 
   public override void DisplayExerciseDetails()
   {
-    Console.WriteLine("Exercise Details:");
     Console.WriteLine("Name: " + _name);
     Console.WriteLine("Type: Strength");
     Console.WriteLine("Repetitions: " + _repetitions);

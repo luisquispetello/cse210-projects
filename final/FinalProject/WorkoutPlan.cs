@@ -1,13 +1,24 @@
 public class WorkoutPlan
 {
-  private string name;
+  private string _name;
   private List<Exercise> _exercises;
   private int _duration;
 
-  public WorkoutPlan(string name, List<Exercise> exercises, int _duration)
+  public WorkoutPlan(string name, List<Exercise> exercises, int duration)
   {
+    _name = name;
     _exercises = exercises;
-    _duration = GetTotalDuration();
+    _duration = duration;
+  }
+
+  public string GetName()
+  {
+    return _name;
+  }
+  
+  public int GetDuration()
+  {
+    return _duration;
   }
 
   public int GetTotalDuration()
@@ -28,5 +39,17 @@ public class WorkoutPlan
       totalCalories += exercise.CalculateCaloriesBurned();
     }
     return totalCalories;
+  }
+
+  public void DisplayWorkoutPlanDetails()
+  {
+    int index = -1;
+    Console.WriteLine($"WORKOUT NAME: {_name}");
+    foreach (Exercise exercise in _exercises)
+    {
+      index++;
+      Console.WriteLine($"Exercise {index} Details:");
+      Console.WriteLine($"{exercise.DisplayExerciseDetails}");
+    }
   }
 }

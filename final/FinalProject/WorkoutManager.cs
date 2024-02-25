@@ -1,14 +1,12 @@
 using System;
-using System.Collections.Generic;
+using System.IO;
 
 public class WorkoutManager
 {
   private User _user;
-  private List<WorkoutPlan> _workoutsPlan;
+  private List<WorkoutPlan> _workoutPlans;
+  private WorkoutLog _workoutLog;
 
-  public WorkoutManager()
-  {
-  }
 
   public void Start()
   {
@@ -92,42 +90,29 @@ public class WorkoutManager
 
   private void LoadUserData()
   {
-    Console.Write("What is the filename for the file goal: ");
+    Console.WriteLine("Loading user data...");
+    Console.Write("Enter the filename for the user data file: ");
     string filename = Console.ReadLine();
 
-    string[] lines = System.IO.File.ReadAllLines(filename);
 
-    foreach (string line in lines)
+    string[] lines = File.ReadAllLines(filename);
+
+    if (lines.Length != 4)
     {
-      string[] parts = line.Split("|");
-
-      string name = parts[0];
-      string description = parts[1];
-      int points = int.Parse(parts[2]);
-      // For ChecklistGoal
-      int target = parts.Length > 4 ? int.Parse(parts[4]) : 0;
-      int bonus = parts.Length > 5 ? int.Parse(parts[5]) : 0;
-
-      Goal goal;
-      if (parts.Length == 3)
-      {
-        goal = new SimpleGoal(name, description, points);
-      }
-      else if (parts.Length == 6)
-      {
-        goal = new ChecklistGoal(name, description, points, target, bonus);
-      }
-      else
-      {
-        goal = new EternalGoal(name, description, points);
-      }
-
-      _goals.Add(goal);
+      Console.WriteLine("Invalid data format in the file. Expected 4 lines for user data.");
+      return;
     }
 
-    Console.Clear();
-    Console.WriteLine("Goals loaded successfully.");
+    string name = lines[0];
+    int age = int.Parse(lines[1]);
+    string gender = lines[2];
+    int weight = int.Parse(lines[3]);
+
+    _user = new User(name, age, gender, weight);
+
+    Console.WriteLine("User data loaded successfully.");
   }
+
 
   private void CreateWorkoutPlan()
   {
@@ -192,36 +177,60 @@ public class WorkoutManager
     }
 
     WorkoutPlan workoutPlan = new(name, exercises, duration);
-    _workoutsPlan.Add(workoutPlan);
+    _workoutPlans.Add(workoutPlan);
     Console.WriteLine("Workout plan created!");
 
   }
 
+
   private void RecordWorkout()
   {
-    Console.WriteLine("Recording a workout...");
+    Console.WriteLine("Available workout plans:");
+    for (int i = 0; i < _workoutPlans.Count; i++)
+    {
+      Console.WriteLine($"{i + 1}. {_workoutPlans[i].GetName}");
+    }
+
+    Console.Write("Select a workout plan to record: ");
+    int choice = int.Parse(Console.ReadLine());
+
+    if (choice >= 1 && choice <= _workoutPlans.Count)
+    {
+      WorkoutPlan selectedWorkoutPlan = _workoutPlans[choice - 1];
+      _workoutLog.AddCompletedWorkout(selectedWorkoutPlan);
+      Console.WriteLine("Workout recorded successfully.");
+    }
+    else
+    {
+      Console.WriteLine("Invalid choice.");
+    }
   }
+
 
   private void CalculateStatistics()
   {
     Console.WriteLine("Calculating statistics...");
   }
 
+
   private void SaveWorkout()
   {
-    Console.Write("What is the filename for the goal file? ");
+    Console.WriteLine("Saving workout data...");
+
+    Console.Write("Enter the filename to save workout data: ");
     string fileName = Console.ReadLine();
 
-    using (StreamWriter outputFile = new(fileName))
+    using (StreamWriter outputFile = new StreamWriter(fileName))
     {
-      foreach (WorkoutLog workoutLog in workoutLogs)
+      foreach (WorkoutPlan workoutPlan in _workoutLog.GetCompletedWorkouts())
       {
-        outputFile.WriteLine(workoutLog);
+        outputFile.WriteLine(workoutPlan.ToString());
       }
     }
-    Console.Clear();
-    Console.WriteLine("Goals saved successfully.");
+
+    Console.WriteLine("Workout data saved successfully.");
   }
+
 
   private void Exit()
   {
